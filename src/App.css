@@ -1,98 +1,622 @@
+/* 主题颜色变量 */
 :root {
   --primary-color: #4CAF50;
+  --primary-dark: #388E3C;
   --secondary-color: #2196F3;
+  --secondary-dark: #1976D2;
+  --tertiary-color: #FF5722;
   --text-color: #333;
+  --text-light: #666;
   --background-color: #f8f9fa;
   --border-color: #ddd;
+  --highlight-color: #ffeb3b;
 }
 
-.container {
-  max-width: 900px;
-  margin: 0 auto;
-  padding: 2rem;
+/* 全局样式 */
+body {
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: #f0f2f5;
   color: var(--text-color);
-  background-color: var(--background-color);
-  border-radius: 8px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 100%;
+  overflow-x: hidden;
 }
 
-h1 {
-  color: var(--primary-color);
-  margin-bottom: 1rem;
-  text-align: center;
-  font-size: 2.2rem;
-}
-
-h2 {
-  color: var(--secondary-color);
-  margin: 1.5rem 0 1rem;
-  font-size: 1.5rem;
-}
-
-p {
-  line-height: 1.6;
-  margin-bottom: 1.5rem;
-}
-
-.input-section {
-  margin: 2rem 0;
+/* App容器样式 */
+.app-container {
   display: flex;
   flex-direction: column;
+  min-height: 100vh;
+  width: 100vw;
+  max-width: 100%;
+}
+
+/* 导航栏样式 */
+.app-nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: var(--text-color);
+  color: white;
+  padding: 0.5rem 1rem;
+  width: 100%;
+  box-sizing: border-box;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.nav-left, .nav-right {
+  display: flex;
   align-items: center;
 }
 
-label {
-  margin-bottom: 0.5rem;
+.back-link {
+  color: white;
+  text-decoration: none;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  transition: all 0.2s ease;
+}
+
+.back-link:hover {
+  color: var(--highlight-color);
+  transform: translateX(-3px);
+}
+
+.github-link {
+  color: white;
+  padding: 0.3rem;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+}
+
+.github-link:hover {
+  color: var(--highlight-color);
+  transform: scale(1.1);
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.app-header {
+  background-color: var(--primary-color);
+  color: white;
+  padding: 1.2rem 1.5rem;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.header-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+
+.app-header h1 {
+  margin: 0;
+  font-size: 1.8rem;
+  text-align: center;
+  flex: 3;
+}
+
+.title-link {
+  color: white;
+  text-decoration: none;
+  transition: all 0.2s ease;
+  cursor: pointer;
+  display: inline-block;
+}
+
+.title-link:hover {
+  color: var(--highlight-color);
+  text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+  transform: scale(1.02);
+}
+
+.app-description {
+  max-width: 800px;
+  margin: 1rem auto 0;
+  opacity: 0.9;
+  text-align: center;
+}
+
+.app-main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding: 1rem;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+.app-footer {
+  background-color: var(--text-color);
+  color: white;
+  text-align: center;
+  padding: 1rem;
+  margin-top: 2rem;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* 算法选择器样式 */
+.selector-section {
+  margin-bottom: 1.5rem;
+  width: 100%;
+}
+
+.algorithm-selector {
+  background-color: white;
+  border-radius: 8px;
+  padding: 1.5rem;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.algorithm-selector h2 {
+  margin-top: 0;
+  margin-bottom: 1rem;
+  color: var(--primary-color);
+}
+
+.algorithm-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  width: 100%;
+  justify-content: space-between;
+}
+
+.algorithm-button {
+  padding: 0.75rem 1.25rem;
+  border: 2px solid var(--primary-color);
+  background-color: white;
+  color: var(--primary-color);
+  font-weight: 600;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  flex: 1;
+  text-align: center;
+  min-width: 150px;
+}
+
+.algorithm-button:hover {
+  background-color: var(--primary-color);
+  color: white;
+}
+
+.algorithm-button.active {
+  background-color: var(--primary-color);
+  color: white;
+}
+
+/* 可视化容器样式 */
+.visualizer-section {
+  flex: 1;
+  width: 100%;
+}
+
+.visualizer-container {
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+  padding: 1.5rem;
+  width: 100%;
+  box-sizing: border-box;
+  max-width: 100%;
+}
+
+.visualizer-container.empty {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 400px;
+}
+
+.welcome-message {
+  text-align: center;
+  max-width: 100%;
+  padding: 2rem;
+}
+
+.welcome-message h2 {
+  color: var(--primary-color);
+}
+
+.n-input-container {
+  margin: 1.5rem 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+}
+
+.n-input-container label {
   font-weight: 600;
 }
 
-input[type="number"] {
+.n-input-container input {
   padding: 0.5rem;
   border: 1px solid var(--border-color);
   border-radius: 4px;
-  width: 100px;
+  width: 80px;
   font-size: 1rem;
   text-align: center;
 }
 
-.results-section {
-  margin-top: 2rem;
-}
-
-table {
+/* 算法可视化器样式 */
+.algorithm-visualizer {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
   width: 100%;
-  border-collapse: collapse;
+  max-width: 100%;
+}
+
+.visualizer-header {
+  margin-bottom: 1rem;
+  width: 100%;
+}
+
+.visualizer-content {
+  display: flex;
+  flex-direction: row;
+  gap: 1.5rem;
+  width: 100%;
+  max-width: 100%;
+}
+
+.visualizer-main {
+  flex: 1;
+  min-width: 60%;
+}
+
+.visualizer-details {
+  width: 30%;
+  min-width: 250px;
+  max-width: 350px;
+  background-color: var(--background-color);
+  padding: 1rem;
+  border-radius: 8px;
+}
+
+.visualizer-controls {
   margin-top: 1rem;
-  font-size: 0.9rem;
+  width: 100%;
 }
 
-th, td {
-  padding: 0.75rem;
-  text-align: center;
+/* 算法信息样式 */
+.algorithm-info {
+  background-color: var(--background-color);
+  padding: 1rem;
+  border-radius: 8px;
+  margin-bottom: 1rem;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.algorithm-info h3 {
+  color: var(--secondary-color);
+  margin-top: 0;
+}
+
+.algorithm-info .description {
+  margin-bottom: 1rem;
+}
+
+.algorithm-info .complexity {
+  display: flex;
+  gap: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+.algorithm-info .steps h4 {
+  margin-bottom: 0.5rem;
+}
+
+.algorithm-info .steps ol {
+  margin: 0;
+  padding-left: 1.5rem;
+}
+
+.algorithm-info .steps li {
+  margin-bottom: 0.5rem;
+}
+
+/* 坐标系样式 */
+.coordinate-system {
   border: 1px solid var(--border-color);
+  border-radius: 8px;
+  background-color: white;
+  width: 100%;
+  box-sizing: border-box;
 }
 
-th {
+.coordinate-system-container {
+  width: 100% !important;
+  height: auto;
+}
+
+/* 动画控制器样式 */
+.animation-controls {
+  background-color: var(--background-color);
+  padding: 1rem;
+  border-radius: 8px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.controls-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.control-button {
+  width: 40px;
+  height: 40px;
+  border: none;
   background-color: var(--secondary-color);
   color: white;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 1.2rem;
+  transition: background-color 0.2s ease;
+}
+
+.control-button:hover {
+  background-color: var(--secondary-dark);
+}
+
+.control-button:disabled {
+  background-color: var(--text-light);
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+
+.controls-progress {
+  margin-top: 1rem;
+  width: 100%;
+}
+
+.progress-info {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.step-counter {
+  font-size: 0.9rem;
+  font-weight: 500;
+  margin-bottom: 0.5rem;
+  color: var(--text-color);
+}
+
+.progress-bar-container {
+  position: relative;
+  width: 100%;
+}
+
+.progress-slider {
+  width: 100%;
+  margin-bottom: 0;
+  position: relative;
+  z-index: 10;
+  cursor: pointer;
+  opacity: 0.8;
+  height: 12px;
+}
+
+.progress-bar {
+  position: absolute;
+  top: 5px;
+  left: 0;
+  width: 100%;
+  height: 8px;
+  background-color: var(--border-color);
+  border-radius: 4px;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.progress-bar-inner {
+  height: 100%;
+  background-color: var(--secondary-color);
+  border-radius: 4px;
+  transition: width 0.3s ease;
+}
+
+/* 二进制显示组件样式 */
+.binary-display {
+  margin: 1rem 0;
+  font-family: monospace;
+  width: 100%;
+  overflow-x: auto;
+}
+
+.binary-value {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 0.25rem;
+}
+
+.binary-bit {
+  display: inline-block;
+  width: 24px;
+  height: 24px;
+  line-height: 24px;
+  text-align: center;
+  background-color: #f0f0f0;
+  margin: 0 2px;
+  border-radius: 4px;
+}
+
+.binary-bit.highlight {
+  background-color: var(--highlight-color);
+  font-weight: bold;
+}
+
+.binary-indices {
+  display: flex;
+  justify-content: center;
+  font-size: 0.8rem;
+  color: var(--text-light);
+}
+
+.binary-index {
+  display: inline-block;
+  width: 24px;
+  text-align: center;
+  margin: 0 2px;
+}
+
+/* 步骤信息样式 */
+.step-info {
+  margin-bottom: 1.5rem;
+}
+
+.binary-info {
+  margin-bottom: 1.5rem;
+}
+
+.update-info, .operation-info {
+  color: var(--tertiary-color);
   font-weight: 600;
 }
 
-tr:nth-child(even) {
-  background-color: rgba(33, 150, 243, 0.1);
+.formula {
+  background-color: #f0f0f0;
+  padding: 0.5rem;
+  border-radius: 4px;
+  font-family: monospace;
+  overflow-x: auto;
 }
 
-@media (max-width: 600px) {
-  .container {
-    padding: 1rem;
+.operation {
+  margin: 1rem 0;
+  font-family: monospace;
+  width: 100%;
+  overflow-x: auto;
+}
+
+.operation-row {
+  display: flex;
+  margin-bottom: 0.5rem;
+}
+
+.operation-label {
+  width: 100px;
+  font-weight: 600;
+}
+
+.binary-small {
+  font-size: 0.9rem;
+  color: var(--text-light);
+}
+
+.visualizer-wrapper {
+  width: 100%;
+  max-width: 100%;
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+  .header-content {
+    flex-direction: column;
+    gap: 0.5rem;
   }
   
-  table {
-    font-size: 0.8rem;
+  .nav-left {
+    justify-content: center;
+    margin-bottom: 0.5rem;
   }
   
-  th, td {
+  .nav-right {
+    justify-content: center;
+    margin-top: 0.5rem;
+  }
+  
+  .app-header h1 {
+    font-size: 1.5rem;
+  }
+  
+  .algorithm-buttons {
+    flex-direction: column;
+  }
+  
+  .visualizer-content {
+    flex-direction: column;
+  }
+  
+  .visualizer-main {
+    width: 100%;
+    min-width: 100%;
+  }
+  
+  .visualizer-details {
+    width: 100%;
+    max-width: 100%;
+  }
+  
+  .app-main {
     padding: 0.5rem;
   }
+}
+
+/* 二进制操作显示样式 */
+.binary-operation {
+  margin-top: 1rem;
+  padding: 0.75rem;
+  background-color: #f5f5f5;
+  border-radius: 4px;
+  border-left: 3px solid var(--tertiary-color);
+}
+
+.operation-title {
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  color: var(--tertiary-color);
+}
+
+.operation-row {
+  display: flex;
+  margin: 0.25rem 0;
+  font-family: monospace;
+}
+
+.operation-label {
+  width: 80px;
+  font-weight: 600;
+}
+
+.operation-value {
+  letter-spacing: 1px;
+}
+
+.operation-row.highlighted {
+  color: var(--tertiary-color);
+  font-weight: 600;
+}
+
+.point {
+  transition: cx 0.5s ease, cy 0.5s ease, r 0.3s ease;
+}
+
+.point-label {
+  font-size: 10px;
+  transition: x 0.5s ease, y 0.5s ease;
 }
