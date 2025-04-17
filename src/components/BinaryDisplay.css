@@ -1,0 +1,88 @@
+.binary-display {
+  margin-bottom: 15px;
+}
+
+.binary-value {
+  display: flex;
+  justify-content: flex-start;
+  margin-bottom: 5px;
+  font-family: monospace;
+  font-size: 1.5rem;
+}
+
+.binary-indices {
+  display: flex;
+  justify-content: flex-start;
+  font-family: monospace;
+  font-size: 0.8rem;
+  color: #777;
+}
+
+.binary-bit {
+  display: inline-block;
+  width: 30px;
+  height: 30px;
+  line-height: 30px;
+  text-align: center;
+  margin-right: 5px;
+  border-radius: 4px;
+  transition: all 0.2s ease-in-out;
+  animation: fade-in 0.3s ease-in-out forwards;
+}
+
+.binary-index {
+  display: inline-block;
+  width: 30px;
+  text-align: center;
+  margin-right: 5px;
+}
+
+.bit-one {
+  background-color: #e3f2fd;
+  color: #1976d2;
+  border: 1px solid #bbdefb;
+}
+
+.bit-zero {
+  background-color: #f5f5f5;
+  color: #757575;
+  border: 1px solid #e0e0e0;
+}
+
+.binary-bit.highlight {
+  background-color: #4caf50;
+  color: white;
+  border: 1px solid #388e3c;
+  transform: scale(1.1);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.binary-bit.highlight.pulse {
+  animation: pulse 1.5s infinite;
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(1.1);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  }
+  50% {
+    transform: scale(1.2);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  }
+  100% {
+    transform: scale(1.1);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  }
+} 
