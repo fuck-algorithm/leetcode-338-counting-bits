@@ -1,0 +1,61 @@
+.highlight-count {
+  font-weight: bold;
+  color: #0077cc;
+  font-size: 1.2em;
+}
+
+.bit-animation-container {
+  margin-top: 15px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.bit-count-animation {
+  display: flex;
+  gap: 5px;
+}
+
+.bit-counter {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  color: white;
+  font-weight: bold;
+  animation: pop-in 0.5s ease-out forwards;
+  opacity: 0;
+  transform: scale(0.5);
+}
+
+.bit-count-sum {
+  font-size: 1.2em;
+  font-weight: bold;
+}
+
+@keyframes pop-in {
+  0% {
+    opacity: 0;
+    transform: scale(0.5);
+  }
+  60% {
+    transform: scale(1.2);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.animation-toggle {
+  margin-top: 10px;
+}
+
+.animation-toggle label {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  cursor: pointer;
+} 
