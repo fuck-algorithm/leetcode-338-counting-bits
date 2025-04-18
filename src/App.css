@@ -620,3 +620,52 @@ body {
   font-size: 10px;
   transition: x 0.5s ease, y 0.5s ease;
 }
+
+/* 算法比较视图样式 */
+.algorithm-button.active {
+  background-color: #4caf50;
+  color: white;
+}
+
+.comparison-visualizer .result-item {
+  background-color: rgba(255, 255, 255, 0.05);
+  transition: all 0.3s ease;
+}
+
+.comparison-visualizer .result-item:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+/* 确保脉冲动画全局可用 */
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(2);
+    opacity: 0;
+  }
+}
+
+/* 多系列数据图例样式 */
+.coordinate-system-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 10px;
+  justify-content: center;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 0.9rem;
+}
+
+.legend-color {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+}
