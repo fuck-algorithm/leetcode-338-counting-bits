@@ -525,7 +525,7 @@ const CoordinateSystem: React.FC<CoordinateSystemProps> = ({
         .attr('data-x', d => d.x)
         .attr('data-y', d => d.y)
         .transition()
-        .delay((d, i) => i * 80) // 添加延迟，使点按顺序出现
+        .delay((_, i) => i * 80) // 添加延迟，使点按顺序出现
         .duration(500)
         .ease(d3.easeElasticOut.amplitude(0.8))
         .attr('r', 5);
