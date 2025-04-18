@@ -40,7 +40,6 @@ const CoordinateSystem: React.FC<CoordinateSystemProps> = ({
 }) => {
   const svgRef = useRef<SVGSVGElement | null>(null);
   const containerRef = useRef<HTMLDivElement | null>(null);
-  const prevPointsRef = useRef<Point[]>([]);
   const [uniqueId] = useState(() => `coord-${Math.random().toString(36).substr(2, 9)}`);
 
   useEffect(() => {
@@ -64,7 +63,7 @@ const CoordinateSystem: React.FC<CoordinateSystemProps> = ({
       .attr('width', containerWidth)
       .attr('height', containerHeight)
       .attr('fill', 'transparent')
-      .on('mousemove', function(event) {
+      .on('mousemove', function() {
         // 添加鼠标移动时的视觉反馈效果
         d3.select(this).style('cursor', 'default');
       });

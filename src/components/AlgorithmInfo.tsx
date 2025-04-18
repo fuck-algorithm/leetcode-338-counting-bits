@@ -57,10 +57,22 @@ const AlgorithmInfo: React.FC<AlgorithmInfoProps> = ({ algorithm }) => {
         '计算 i & (i-1)，这会消除i中最低位的1',
         '动态规划状态转移：bits[i] = bits[i & (i-1)] + 1'
       ]
+    },
+    comparison: {
+      name: '算法比较视图',
+      description: '比较不同算法在计算比特位时的执行过程和结果',
+      timecomplexity: '因算法而异',
+      spacecomplexity: '因算法而异',
+      steps: [
+        '将多种算法应用于相同的输入范围',
+        '通过不同颜色的曲线区分各算法的结果',
+        '支持实时切换需要展示的算法',
+        '提供直观的对比视图以便理解算法差异'
+      ]
     }
   };
 
-  const details = algorithmDetails[algorithm];
+  const details = algorithmDetails[algorithm] || algorithmDetails.brianKernighan;
 
   return (
     <div className="algorithm-info">
@@ -75,7 +87,7 @@ const AlgorithmInfo: React.FC<AlgorithmInfoProps> = ({ algorithm }) => {
       <div className="steps">
         <h4>算法步骤：</h4>
         <ol>
-          {details.steps.map((step, index) => (
+          {details.steps.map((step: string, index: number) => (
             <li key={index}>{step}</li>
           ))}
         </ol>

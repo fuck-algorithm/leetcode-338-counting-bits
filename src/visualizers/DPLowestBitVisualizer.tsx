@@ -77,7 +77,6 @@ const DPLowestBitVisualizer: React.FC<DPLowestBitVisualizerProps> = ({ n }) => {
     totalSteps: stepsData.length,
     initialStep: -1,
     autoPlay: false,
-    delay: 1000,
   });
   
   // 当前步骤的数据

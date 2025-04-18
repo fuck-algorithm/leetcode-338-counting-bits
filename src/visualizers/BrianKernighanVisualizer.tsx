@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import CoordinateSystem from '../components/CoordinateSystem';
 import BinaryDisplay from '../components/BinaryDisplay';
 import AlgorithmInfo from '../components/AlgorithmInfo';
@@ -97,7 +97,6 @@ const BrianKernighanVisualizer: React.FC<BrianKernighanVisualizerProps> = ({ n }
     totalSteps: stepsData.length,
     initialStep: -1,
     autoPlay: false,
-    delay: 1000,
   });
   
   // 当前步骤的数据
