@@ -3,7 +3,7 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
-  "homepage": "https://cc11001100.github.io/fuck-algorithm/leetcode-338-counting-bits",
+  "homepage": "https://fuck-algorithm.github.io/leetcode-338-counting-bits/",
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
@@ -22,7 +22,8 @@
     "d3": "^7.9.0",
     "gh-pages": "^6.3.0",
     "react": "^19.0.0",
-    "react-dom": "^19.0.0"
+    "react-dom": "^19.0.0",
+    "react-router-dom": "^7.5.1"
   },
   "devDependencies": {
     "@eslint/js": "^9.22.0",

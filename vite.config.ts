@@ -4,7 +4,7 @@ import react from '@vitejs/plugin-react'
 // https://vite.dev/config/
 export default defineConfig({
   plugins: [react()],
-  base: '/fuck-algorithm/leetcode-338-counting-bits/', // GitHub Pages子路径
+  base: '/leetcode-338-counting-bits/', // GitHub Pages子路径
   build: {
     outDir: 'dist', // 输出目录
     assetsDir: 'assets', // 静态资源目录
