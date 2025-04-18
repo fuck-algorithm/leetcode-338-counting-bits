@@ -1,0 +1,8 @@
+actions_settings:
+  workflow_permissions:
+    contents: write
+    pages: write
+    id-token: write
+    actions: write
+  default_workflow_permissions: write
+  allowed_actions: all 
