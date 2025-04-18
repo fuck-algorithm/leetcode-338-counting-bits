@@ -12,7 +12,10 @@
     "clean": "rimraf dist",
     "prebuild": "npm run clean",
     "predeploy": "npm run build",
-    "deploy": "gh-pages -d dist"
+    "deploy": "gh-pages -d dist",
+    "deploy:local": "gh-pages -d dist --message \"本地部署: $(date +'%Y-%m-%d %H:%M:%S')\"",
+    "serve:dist": "vite preview --outDir dist",
+    "preview:build": "npm run build && npm run serve:dist"
   },
   "dependencies": {
     "@types/d3": "^7.4.3",
