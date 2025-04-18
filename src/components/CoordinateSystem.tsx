@@ -66,7 +66,6 @@ const CoordinateSystem: React.FC<CoordinateSystemProps> = ({
       .attr('fill', 'transparent')
       .on('mousemove', function(event) {
         // 添加鼠标移动时的视觉反馈效果
-        const [mouseX, mouseY] = d3.pointer(event);
         d3.select(this).style('cursor', 'default');
       });
     

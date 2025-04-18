@@ -4,7 +4,6 @@ interface UseAnimationOptions {
   totalSteps: number;
   initialStep?: number;
   autoPlay?: boolean;
-  delay?: number;
 }
 
 interface AnimationControls {
@@ -29,7 +28,6 @@ export function useAnimation({
   totalSteps,
   initialStep = -1,
   autoPlay = false,
-  delay = 1000,
 }: UseAnimationOptions): AnimationControls {
   const [currentStep, setCurrentStep] = useState<number>(initialStep);
   const [isPlaying, setIsPlaying] = useState<boolean>(autoPlay);

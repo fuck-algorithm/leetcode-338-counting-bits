@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 import './App.css'
 import AlgorithmSelector, { AlgorithmType } from './components/AlgorithmSelector'
 import VisualizerContainer from './components/VisualizerContainer'

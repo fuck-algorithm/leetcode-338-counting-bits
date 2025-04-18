@@ -4,7 +4,7 @@ import BinaryDisplay from '../components/BinaryDisplay';
 import AlgorithmInfo from '../components/AlgorithmInfo';
 import AnimationControls from '../components/AnimationControls';
 import { useAnimation } from '../hooks/useAnimation';
-import { countBitsBrianKernighan, countOnes, generateAnimationData, getBinaryLength } from '../algorithms';
+import { countBitsBrianKernighan, generateAnimationData, getBinaryLength } from '../algorithms';
 
 interface BrianKernighanVisualizerProps {
   n: number;
@@ -162,7 +162,6 @@ const BrianKernighanVisualizer: React.FC<BrianKernighanVisualizerProps> = ({ n }
       return null;
     }
     
-    const num = currentStepData.number;
     const x = parseInt(currentStepData.binary, 2);
     const xMinus1 = x - 1;
     const result = x & xMinus1;
