@@ -4,6 +4,7 @@ import BrianKernighanVisualizer from '../visualizers/BrianKernighanVisualizer';
 import DPHighestBitVisualizer from '../visualizers/DPHighestBitVisualizer';
 import DPLowestBitVisualizer from '../visualizers/DPLowestBitVisualizer';
 import DPLeastSignificantBitVisualizer from '../visualizers/DPLeastSignificantBitVisualizer';
+import AlgorithmComparisonVisualizer from '../visualizers/AlgorithmComparisonVisualizer';
 
 interface VisualizerContainerProps {
   algorithm: AlgorithmType | null;
@@ -61,6 +62,7 @@ const VisualizerContainer: React.FC<VisualizerContainerProps> = ({ algorithm }) 
         {algorithm === 'dpHighestBit' && <DPHighestBitVisualizer n={inputN} />}
         {algorithm === 'dpLowestBit' && <DPLowestBitVisualizer n={inputN} />}
         {algorithm === 'dpLeastSignificantBit' && <DPLeastSignificantBitVisualizer n={inputN} />}
+        {algorithm === 'comparison' && <AlgorithmComparisonVisualizer n={inputN} />}
       </div>
     </div>
   );
