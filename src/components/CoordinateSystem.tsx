@@ -1,4 +1,4 @@
-import React, { useRef, useEffect, useState } from 'react';
+import React, { useRef, useEffect, useState, useMemo } from 'react';
 import * as d3 from 'd3';
 
 interface Point {
@@ -77,18 +77,13 @@ const CoordinateSystem: React.FC<CoordinateSystemProps> = ({
       .attr('cx', '50%')
       .attr('cy', '50%')
       .attr('r', '50%')
-      .attr('fx', '25%')
-      .attr('fy', '25%');
+      .attr('fx', '50%')
+      .attr('fy', '50%');
       
     pointGradient.append('stop')
       .attr('offset', '0%')
-      .attr('stop-color', '#8bdb97')
+      .attr('stop-color', '#81c784')
       .attr('stop-opacity', 1);
-      
-    pointGradient.append('stop')
-      .attr('offset', '70%')
-      .attr('stop-color', '#4caf50')
-      .attr('stop-opacity', 0.9);
       
     pointGradient.append('stop')
       .attr('offset', '100%')
@@ -97,41 +92,36 @@ const CoordinateSystem: React.FC<CoordinateSystemProps> = ({
     
     // 为每个系列创建渐变
     multiSeriesData.forEach(series => {
-      // 提取基础颜色
       const baseColor = series.color;
+      const seriesId = series.id;
       
-      // 创建该系列的渐变
+      // 提取颜色的HSL值，创建亮色和暗色变体
+      const colorObj = d3.color(baseColor);
+      const brighterColor = colorObj ? colorObj.brighter(0.5).toString() : baseColor;
+      const darkerColor = colorObj ? colorObj.darker(0.2).toString() : baseColor;
+      
+      // 为该系列点创建径向渐变
       const seriesGradient = defs.append('radialGradient')
-        .attr('id', `series-gradient-${series.id}-${uniqueId}`)
+        .attr('id', `series-gradient-${seriesId}-${uniqueId}`)
         .attr('cx', '50%')
         .attr('cy', '50%')
         .attr('r', '50%')
-        .attr('fx', '25%')
-        .attr('fy', '25%');
-        
-      // 亮色版本
-      const lighterColor = d3.rgb(baseColor).brighter(0.8);
-      // 暗色版本
-      const darkerColor = d3.rgb(baseColor).darker(0.5);
+        .attr('fx', '35%')
+        .attr('fy', '35%');
         
       seriesGradient.append('stop')
         .attr('offset', '0%')
-        .attr('stop-color', lighterColor.toString())
+        .attr('stop-color', brighterColor)
         .attr('stop-opacity', 1);
         
       seriesGradient.append('stop')
-        .attr('offset', '70%')
-        .attr('stop-color', baseColor)
-        .attr('stop-opacity', 0.9);
-        
-      seriesGradient.append('stop')
         .attr('offset', '100%')
-        .attr('stop-color', darkerColor.toString())
+        .attr('stop-color', darkerColor)
         .attr('stop-opacity', 0.8);
       
       // 创建高亮版本
       const highlightSeriesGradient = defs.append('radialGradient')
-        .attr('id', `highlight-series-gradient-${series.id}-${uniqueId}`)
+        .attr('id', `highlight-series-gradient-${seriesId}-${uniqueId}`)
         .attr('cx', '50%')
         .attr('cy', '50%')
         .attr('r', '50%')
@@ -148,12 +138,12 @@ const CoordinateSystem: React.FC<CoordinateSystemProps> = ({
         
       highlightSeriesGradient.append('stop')
         .attr('offset', '60%')
-        .attr('stop-color', lighterColor.toString())
+        .attr('stop-color', brighterColor)
         .attr('stop-opacity', 0.9);
         
       highlightSeriesGradient.append('stop')
         .attr('offset', '100%')
-        .attr('stop-color', baseColor)
+        .attr('stop-color', darkerColor)
         .attr('stop-opacity', 0.8);
     });
     
@@ -187,8 +177,8 @@ const CoordinateSystem: React.FC<CoordinateSystemProps> = ({
       .attr('cx', '50%')
       .attr('cy', '50%')
       .attr('r', '50%')
-      .attr('fx', '25%')
-      .attr('fy', '25%');
+      .attr('fx', '30%')
+      .attr('fy', '30%');
       
     highlightGradient.append('stop')
       .attr('offset', '0%')
@@ -196,7 +186,7 @@ const CoordinateSystem: React.FC<CoordinateSystemProps> = ({
       .attr('stop-opacity', 1);
       
     highlightGradient.append('stop')
-      .attr('offset', '60%')
+      .attr('offset', '50%')
       .attr('stop-color', '#ff9800')
       .attr('stop-opacity', 0.9);
       
@@ -363,19 +353,27 @@ const CoordinateSystem: React.FC<CoordinateSystemProps> = ({
     
     // 调整轴标签样式
     svg.selectAll('.axis text')
-      .attr('fill', '#adb5bd')
-      .attr('font-size', '12px');
+      .attr('fill', '#5c6b73')
+      .attr('font-size', '12px')
+      .attr('font-weight', '500');
     
     svg.selectAll('.axis path')
-      .attr('stroke', '#ced4da');
+      .attr('stroke', '#ced4da')
+      .attr('stroke-width', '1.5');
     
     svg.selectAll('.axis line')
-      .attr('stroke', '#ced4da');
+      .attr('stroke', '#ced4da')
+      .attr('stroke-width', '0.7');
+    
+    svg.selectAll('.grid-line')
+      .attr('stroke', '#f0f0f0')
+      .attr('stroke-dasharray', '3,3')
+      .attr('stroke-opacity', 0.6);
     
     // 如果提供了多系列数据，则绘制多条曲线
     if (multiSeriesData.length > 0) {
       // 为每个系列创建组
-      multiSeriesData.forEach(series => {
+      multiSeriesData.forEach((series, seriesIndex) => {
         const seriesPoints = series.points || [];
         const seriesColor = series.color;
         const seriesId = series.id;
@@ -392,8 +390,8 @@ const CoordinateSystem: React.FC<CoordinateSystemProps> = ({
             .datum(seriesPoints)
             .attr('fill', 'none')
             .attr('stroke', seriesColor)
-            .attr('stroke-width', 2)
-            .attr('stroke-opacity', 0.8)
+            .attr('stroke-width', 2.5)
+            .attr('stroke-opacity', 0.7)
             .attr('d', line)
             .attr('class', `series-line series-${seriesId}`)
             .attr('stroke-dasharray', function() {
@@ -403,7 +401,8 @@ const CoordinateSystem: React.FC<CoordinateSystemProps> = ({
               return this.getTotalLength();
             })
             .transition()
-            .duration(1000)
+            .duration(1200)
+            .ease(d3.easeQuadOut)
             .attr('stroke-dashoffset', 0);
         }
         
@@ -416,17 +415,19 @@ const CoordinateSystem: React.FC<CoordinateSystemProps> = ({
           .attr('cx', d => xScale(d.x))
           .attr('cy', d => yScale(d.y))
           .attr('r', 0) // 初始半径为0，之后会通过动画增大
-          .attr('fill', `url(#series-gradient-${seriesId}-${uniqueId})`)
+          .attr('fill', d => d.color || `url(#series-gradient-${seriesId}-${uniqueId})`)
           .attr('stroke', seriesColor)
-          .attr('stroke-width', 1)
-          .attr('stroke-opacity', 0.8)
+          .attr('stroke-width', 1.5)
+          .attr('stroke-opacity', 0.85)
+          .attr('filter', `url(#glow-filter-${uniqueId})`)
           .attr('data-x', d => d.x)
           .attr('data-y', d => d.y)
           .attr('data-series', seriesId)
           .transition()
-          .delay((d, i) => i * 50) // 添加延迟，使点按顺序出现
-          .duration(300)
-          .attr('r', 4);
+          .delay((d, i) => i * 80 + seriesIndex * 150) // 添加延迟，使点按顺序出现
+          .duration(500)
+          .ease(d3.easeElasticOut.amplitude(0.8))
+          .attr('r', 5);
       });
       
       // 添加高亮点
@@ -443,22 +444,39 @@ const CoordinateSystem: React.FC<CoordinateSystemProps> = ({
             .attr('cx', xScale(point.x))
             .attr('cy', yScale(point.y))
             .attr('r', 8)
-            .attr('fill', color)
+            .attr('fill', `url(#highlight-gradient-${uniqueId})`)
             .attr('filter', `url(#strong-glow-filter-${uniqueId})`)
-            .attr('data-series', seriesId);
+            .attr('data-series', seriesId)
+            .style('transform-origin', `${xScale(point.x)}px ${yScale(point.y)}px`)
+            .style('animation', 'pulse-scale 1.5s ease-in-out infinite');
           
           // 添加脉冲环
           g.append('circle')
             .attr('class', 'pulse-ring')
             .attr('cx', xScale(point.x))
             .attr('cy', yScale(point.y))
-            .attr('r', 8)
+            .attr('r', 10)
             .attr('stroke', color)
-            .attr('stroke-width', 2)
+            .attr('stroke-width', 2.5)
             .attr('fill', 'none')
             .attr('opacity', 1)
             .attr('data-series', seriesId)
-            .style('animation', 'pulse 1.5s ease-out infinite');
+            .style('animation', 'pulse 1.8s ease-out infinite');
+            
+          // 添加高亮环
+          g.append('circle')
+            .attr('class', 'highlight-ring')
+            .attr('cx', xScale(point.x))
+            .attr('cy', yScale(point.y))
+            .attr('r', 14)
+            .attr('stroke', `url(#rotating-gradient-${uniqueId})`)
+            .attr('stroke-width', 1.5)
+            .attr('fill', 'none')
+            .attr('opacity', 0.7)
+            .attr('data-series', seriesId)
+            .style('filter', `url(#pulse-filter-${uniqueId})`)
+            .style('transform-origin', `${xScale(point.x)}px ${yScale(point.y)}px`)
+            .style('animation', 'rotate 8s linear infinite');
         });
       }
     } else {
@@ -499,16 +517,18 @@ const CoordinateSystem: React.FC<CoordinateSystemProps> = ({
         .attr('cx', d => xScale(d.x))
         .attr('cy', d => yScale(d.y))
         .attr('r', 0) // 初始半径为0，之后会通过动画增大
-        .attr('fill', `url(#point-gradient-${uniqueId})`)
+        .attr('fill', d => d.color || `url(#point-gradient-${uniqueId})`)
         .attr('stroke', '#388e3c')
-        .attr('stroke-width', 1)
-        .attr('stroke-opacity', 0.8)
+        .attr('stroke-width', 1.5)
+        .attr('stroke-opacity', 0.85)
+        .attr('filter', `url(#glow-filter-${uniqueId})`)
         .attr('data-x', d => d.x)
         .attr('data-y', d => d.y)
         .transition()
-        .delay((d, i) => i * 50) // 添加延迟，使点按顺序出现
-        .duration(300)
-        .attr('r', 4);
+        .delay((d, i) => i * 80) // 添加延迟，使点按顺序出现
+        .duration(500)
+        .ease(d3.easeElasticOut.amplitude(0.8))
+        .attr('r', 5);
       
       // 如果有高亮点，为其增加特殊效果
       if (highlightedPoint) {
@@ -519,19 +539,35 @@ const CoordinateSystem: React.FC<CoordinateSystemProps> = ({
           .attr('cy', yScale(highlightedPoint.y))
           .attr('r', 8)
           .attr('fill', `url(#highlight-gradient-${uniqueId})`)
-          .attr('filter', `url(#strong-glow-filter-${uniqueId})`);
+          .attr('filter', `url(#strong-glow-filter-${uniqueId})`)
+          .style('transform-origin', `${xScale(highlightedPoint.x)}px ${yScale(highlightedPoint.y)}px`)
+          .style('animation', 'pulse-scale 1.5s ease-in-out infinite');
         
         // 添加脉冲环
         g.append('circle')
           .attr('class', 'pulse-ring')
           .attr('cx', xScale(highlightedPoint.x))
           .attr('cy', yScale(highlightedPoint.y))
-          .attr('r', 8)
-          .attr('stroke', '#ff9800')
-          .attr('stroke-width', 2)
+          .attr('r', 10)
+          .attr('stroke', highlightedPoint.color || '#ff9800')
+          .attr('stroke-width', 2.5)
           .attr('fill', 'none')
-          .attr('opacity', 1)
-          .style('animation', 'pulse 1.5s ease-out infinite');
+          .attr('opacity', 0.9)
+          .style('animation', 'pulse 1.8s ease-out infinite');
+          
+        // 添加高亮环
+        g.append('circle')
+          .attr('class', 'highlight-ring')
+          .attr('cx', xScale(highlightedPoint.x))
+          .attr('cy', yScale(highlightedPoint.y))
+          .attr('r', 14)
+          .attr('stroke', `url(#rotating-gradient-${uniqueId})`)
+          .attr('stroke-width', 1.5)
+          .attr('fill', 'none')
+          .attr('opacity', 0.7)
+          .style('filter', `url(#pulse-filter-${uniqueId})`)
+          .style('transform-origin', `${xScale(highlightedPoint.x)}px ${yScale(highlightedPoint.y)}px`)
+          .style('animation', 'rotate 8s linear infinite');
       }
     }
     
@@ -583,8 +619,20 @@ const CoordinateSystem: React.FC<CoordinateSystemProps> = ({
               opacity: 1;
             }
             100% {
-              transform: scale(2);
+              transform: scale(2.2);
               opacity: 0;
+            }
+          }
+          
+          @keyframes pulse-scale {
+            0% {
+              transform: scale(1);
+            }
+            50% {
+              transform: scale(1.15);
+            }
+            100% {
+              transform: scale(1);
             }
           }
           
@@ -597,8 +645,27 @@ const CoordinateSystem: React.FC<CoordinateSystemProps> = ({
             }
           }
           
-          .highlight-ring {
-            animation: rotate 10s linear infinite;
+          .coordinate-system-container {
+            position: relative;
+            overflow: visible;
+          }
+          
+          .axis text {
+            transition: font-size 0.3s ease;
+          }
+          
+          .axis text:hover {
+            font-size: 14px;
+            font-weight: bold;
+          }
+          
+          .point {
+            transition: r 0.3s ease;
+            cursor: pointer;
+          }
+          
+          .point:hover {
+            r: 7;
           }
         `}
       </style>
