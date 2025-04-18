@@ -1,5 +1,7 @@
 # LeetCode 338: Counting Bits
 
+[![Deploy to GitHub Pages](https://github.com/fuck-algorithm/leetcode-338-counting-bits/actions/workflows/deploy.yml/badge.svg)](https://github.com/fuck-algorithm/leetcode-338-counting-bits/actions/workflows/deploy.yml)
+
 这是一个演示LeetCode 338题"计数比特位"的React+TypeScript应用。
 
 ## 题目描述
