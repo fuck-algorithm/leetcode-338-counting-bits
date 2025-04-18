@@ -1,6 +1,6 @@
 import React from 'react';
 
-export type AlgorithmType = 'brianKernighan' | 'dpHighestBit' | 'dpLowestBit' | 'dpLeastSignificantBit';
+export type AlgorithmType = 'brianKernighan' | 'dpHighestBit' | 'dpLowestBit' | 'dpLeastSignificantBit' | 'comparison';
 
 interface AlgorithmSelectorProps {
   currentAlgorithm: AlgorithmType | null;
@@ -16,6 +16,7 @@ const AlgorithmSelector: React.FC<AlgorithmSelectorProps> = ({
     { id: 'dpHighestBit', name: '方法二：动态规划——最高有效位' },
     { id: 'dpLowestBit', name: '方法三：动态规划——最低有效位' },
     { id: 'dpLeastSignificantBit', name: '方法四：动态规划——最低设置位' },
+    { id: 'comparison', name: '算法比较视图' },
   ];
 
   return (
