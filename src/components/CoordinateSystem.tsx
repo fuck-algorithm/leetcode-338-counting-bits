@@ -230,7 +230,7 @@ const CoordinateSystem: React.FC<CoordinateSystemProps> = ({
     // 如果提供了多系列数据，则绘制多条线并添加图例
     if (multiSeriesData.length > 0) {
       // 为每个系列创建组
-      multiSeriesData.forEach((series, seriesIndex) => {
+      multiSeriesData.forEach((series) => {
         const seriesPoints = series.points || [];
         const seriesColor = series.color;
         const seriesId = series.id;

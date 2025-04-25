@@ -18,7 +18,6 @@ const AnimationControls: React.FC<AnimationControlsProps> = ({
   currentStep,
   totalSteps,
   isPlaying,
-  progress,
   onPlay,
   onPause,
   onReset,
