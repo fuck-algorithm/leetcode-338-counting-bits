@@ -144,6 +144,89 @@ const CoordinateSystem: React.FC<CoordinateSystemProps> = ({
       .attr('font-size', '14px')
       .text('纵轴：该数字二进制中1的个数');
     
+    // 添加明显的坐标原点标记
+    g.append('circle')
+      .attr('cx', xScale(0))
+      .attr('cy', yScale(0))
+      .attr('r', 4)
+      .attr('fill', '#333')
+      .attr('stroke', 'white')
+      .attr('stroke-width', 1);
+    
+    g.append('text')
+      .attr('x', xScale(0) + 5)
+      .attr('y', yScale(0) - 5)
+      .attr('fill', '#333')
+      .attr('font-size', '12px')
+      .text('原点 (0,0)');
+    
+    // 添加最大值标记
+    if (maxX > 0 && maxY > 0) {
+      g.append('line')
+        .attr('x1', 0)
+        .attr('y1', 0)
+        .attr('x2', innerWidth)
+        .attr('y2', 0)
+        .attr('stroke', '#9ec0a2')
+        .attr('stroke-width', 1)
+        .attr('stroke-dasharray', '3,3')
+        .attr('opacity', 0.6);
+      
+      g.append('text')
+        .attr('x', innerWidth - 50)
+        .attr('y', 15)
+        .attr('fill', '#4caf50')
+        .attr('font-size', '12px')
+        .text(`最大1的个数: ${maxY}`);
+      
+      g.append('line')
+        .attr('x1', innerWidth)
+        .attr('y1', 0)
+        .attr('x2', innerWidth)
+        .attr('y2', innerHeight)
+        .attr('stroke', '#9ec0a2')
+        .attr('stroke-width', 1)
+        .attr('stroke-dasharray', '3,3')
+        .attr('opacity', 0.6);
+      
+      g.append('text')
+        .attr('x', innerWidth - 30)
+        .attr('y', innerHeight - 5)
+        .attr('fill', '#4caf50')
+        .attr('font-size', '12px')
+        .text(`n = ${maxX}`);
+    }
+    
+    // 添加趋势线辅助参考
+    if (maxX > 2 && maxY > 2) {
+      // log(n)趋势线
+      const logPoints: [number, number][] = [];
+      for (let i = 1; i <= maxX; i++) {
+        logPoints.push([i, Math.log2(i)]);
+      }
+      
+      const logLine = d3.line<[number, number]>()
+        .x(d => xScale(d[0]))
+        .y(d => yScale(d[1]))
+        .curve(d3.curveBasis);
+      
+      g.append('path')
+        .datum(logPoints)
+        .attr('fill', 'none')
+        .attr('stroke', '#8c9eff')
+        .attr('stroke-width', 1.5)
+        .attr('stroke-dasharray', '5,5')
+        .attr('opacity', 0.5)
+        .attr('d', logLine);
+      
+      g.append('text')
+        .attr('x', xScale(maxX * 0.7))
+        .attr('y', yScale(Math.log2(maxX * 0.7)) - 10)
+        .attr('fill', '#5c6bc0')
+        .attr('font-size', '12px')
+        .text('log₂(n) 参考线');
+    }
+    
     // 如果提供了多系列数据，则绘制多条线并添加图例
     if (multiSeriesData.length > 0) {
       // 为每个系列创建组
@@ -182,7 +265,39 @@ const CoordinateSystem: React.FC<CoordinateSystemProps> = ({
           .attr('stroke-width', 1)
           .attr('data-x', d => d.x)
           .attr('data-y', d => d.y)
-          .attr('data-series', seriesId);
+          .attr('data-series', seriesId)
+          .on('mouseover', function(event, d) {
+            // 创建悬停提示
+            const tooltip = d3.select(containerRef.current)
+              .append('div')
+              .attr('class', 'point-tooltip')
+              .style('position', 'absolute')
+              .style('background', 'rgba(0,0,0,0.7)')
+              .style('color', 'white')
+              .style('padding', '5px 10px')
+              .style('border-radius', '4px')
+              .style('font-size', '12px')
+              .style('pointer-events', 'none')
+              .style('z-index', 20)
+              .style('left', `${event.pageX - containerRef.current!.getBoundingClientRect().left + 10}px`)
+              .style('top', `${event.pageY - containerRef.current!.getBoundingClientRect().top - 20}px`);
+            
+            tooltip.html(`数字: ${d.x}<br>1的个数: ${d.y}<br>算法: ${seriesId}`);
+            
+            // 高亮当前点
+            d3.select(this)
+              .attr('r', 6)
+              .attr('stroke-width', 2);
+          })
+          .on('mouseout', function() {
+            // 移除提示
+            d3.select(containerRef.current).selectAll('.point-tooltip').remove();
+            
+            // 恢复点大小
+            d3.select(this)
+              .attr('r', 4)
+              .attr('stroke-width', 1);
+          });
       });
       
       // 添加高亮点
@@ -201,6 +316,27 @@ const CoordinateSystem: React.FC<CoordinateSystemProps> = ({
             .attr('fill', color)
             .attr('stroke', 'white')
             .attr('stroke-width', 2);
+          
+          // 添加标识线
+          g.append('line')
+            .attr('x1', 0)
+            .attr('y1', yScale(point.y))
+            .attr('x2', xScale(point.x))
+            .attr('y2', yScale(point.y))
+            .attr('stroke', color)
+            .attr('stroke-width', 1)
+            .attr('stroke-dasharray', '3,3')
+            .attr('opacity', 0.7);
+          
+          g.append('line')
+            .attr('x1', xScale(point.x))
+            .attr('y1', yScale(point.y))
+            .attr('x2', xScale(point.x))
+            .attr('y2', innerHeight)
+            .attr('stroke', color)
+            .attr('stroke-width', 1)
+            .attr('stroke-dasharray', '3,3')
+            .attr('opacity', 0.7);
           
           // 添加文本标签显示坐标
           g.append('text')
@@ -263,7 +399,39 @@ const CoordinateSystem: React.FC<CoordinateSystemProps> = ({
         .attr('stroke', 'white')
         .attr('stroke-width', 1)
         .attr('data-x', d => d.x)
-        .attr('data-y', d => d.y);
+        .attr('data-y', d => d.y)
+        .on('mouseover', function(event, d) {
+          // 创建悬停提示
+          const tooltip = d3.select(containerRef.current)
+            .append('div')
+            .attr('class', 'point-tooltip')
+            .style('position', 'absolute')
+            .style('background', 'rgba(0,0,0,0.7)')
+            .style('color', 'white')
+            .style('padding', '5px 10px')
+            .style('border-radius', '4px')
+            .style('font-size', '12px')
+            .style('pointer-events', 'none')
+            .style('z-index', 20)
+            .style('left', `${event.pageX - containerRef.current!.getBoundingClientRect().left + 10}px`)
+            .style('top', `${event.pageY - containerRef.current!.getBoundingClientRect().top - 20}px`);
+          
+          tooltip.html(`数字: ${d.x}<br>二进制: ${d.x.toString(2)}<br>1的个数: ${d.y}`);
+          
+          // 高亮当前点
+          d3.select(this)
+            .attr('r', 6)
+            .attr('stroke-width', 2);
+        })
+        .on('mouseout', function() {
+          // 移除提示
+          d3.select(containerRef.current).selectAll('.point-tooltip').remove();
+          
+          // 恢复点大小
+          d3.select(this)
+            .attr('r', 4)
+            .attr('stroke-width', 1);
+        });
       
       // 如果有高亮点，为其增加特殊效果
       if (highlightedPoint) {
@@ -277,6 +445,44 @@ const CoordinateSystem: React.FC<CoordinateSystemProps> = ({
           .attr('stroke', 'white')
           .attr('stroke-width', 2);
         
+        // 添加辅助线
+        g.append('line')
+          .attr('x1', 0)
+          .attr('y1', yScale(highlightedPoint.y))
+          .attr('x2', xScale(highlightedPoint.x))
+          .attr('y2', yScale(highlightedPoint.y))
+          .attr('stroke', '#ff9800')
+          .attr('stroke-width', 1)
+          .attr('stroke-dasharray', '3,3')
+          .attr('opacity', 0.7);
+        
+        g.append('line')
+          .attr('x1', xScale(highlightedPoint.x))
+          .attr('y1', yScale(highlightedPoint.y))
+          .attr('x2', xScale(highlightedPoint.x))
+          .attr('y2', innerHeight)
+          .attr('stroke', '#ff9800')
+          .attr('stroke-width', 1)
+          .attr('stroke-dasharray', '3,3')
+          .attr('opacity', 0.7);
+          
+        // 添加坐标值
+        g.append('text')
+          .attr('x', 5)
+          .attr('y', yScale(highlightedPoint.y) - 5)
+          .attr('fill', '#ff9800')
+          .attr('font-size', '12px')
+          .attr('text-anchor', 'start')
+          .text(`${highlightedPoint.y}`);
+        
+        g.append('text')
+          .attr('x', xScale(highlightedPoint.x))
+          .attr('y', innerHeight - 5)
+          .attr('fill', '#ff9800')
+          .attr('font-size', '12px')
+          .attr('text-anchor', 'middle')
+          .text(`${highlightedPoint.x}`);
+          
         // 添加文本标签
         g.append('text')
           .attr('x', xScale(highlightedPoint.x) + 10)
@@ -284,6 +490,14 @@ const CoordinateSystem: React.FC<CoordinateSystemProps> = ({
           .attr('fill', '#333')
           .attr('font-size', '12px')
           .text(`当前数字: ${highlightedPoint.x}, 1的个数: ${highlightedPoint.y}`);
+          
+        // 添加二进制标签
+        g.append('text')
+          .attr('x', xScale(highlightedPoint.x) + 10)
+          .attr('y', yScale(highlightedPoint.y) + 10)
+          .attr('fill', '#666')
+          .attr('font-size', '11px')
+          .text(`二进制: ${highlightedPoint.x.toString(2)}`);
       }
     }
     
@@ -328,6 +542,7 @@ const CoordinateSystem: React.FC<CoordinateSystemProps> = ({
           .point:hover {
             r: 6;
             stroke-width: 2;
+            cursor: pointer;
           }
           
           /* 添加图表描述 */
@@ -335,11 +550,20 @@ const CoordinateSystem: React.FC<CoordinateSystemProps> = ({
             position: absolute;
             bottom: 10px;
             right: 10px;
-            background: rgba(255,255,255,0.8);
+            background: rgba(255,255,255,0.9);
             padding: 8px;
             border-radius: 4px;
             border: 1px solid #ddd;
             font-size: 12px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+          }
+          
+          .coordinate-description p {
+            margin: 3px 0;
+          }
+          
+          .coordinate-description strong {
+            color: #1976d2;
           }
         `}
       </style>
@@ -351,6 +575,8 @@ const CoordinateSystem: React.FC<CoordinateSystemProps> = ({
         <p>- 横坐标是数字的值</p>
         <p>- 纵坐标是该数字二进制中1的个数</p>
         <p>- 黄色圆圈表示当前正在处理的数字</p>
+        <p>- 虚线是辅助线，帮助查看坐标</p>
+        <p>- 悬停在点上可查看详细信息</p>
       </div>
     </div>
   );
