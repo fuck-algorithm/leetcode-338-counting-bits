@@ -1,10 +1,11 @@
 import React from 'react';
-import CoordinateSystem from '../components/CoordinateSystem';
-import BinaryDisplay from '../components/BinaryDisplay';
-import AlgorithmInfo from '../components/AlgorithmInfo';
-import AnimationControls from '../components/AnimationControls';
-import { useAnimation } from '../hooks/useAnimation';
-import { countBitsDPHighestBit, generateAnimationData, getBinaryLength } from '../algorithms';
+import CoordinateSystem from '../../components/CoordinateSystem';
+import BinaryDisplay from '../../components/BinaryDisplay';
+import AlgorithmInfo from '../../components/AlgorithmInfo';
+import AnimationControls from '../../components/AnimationControls';
+import { useAnimation } from '../../hooks/useAnimation';
+import { countBitsDPHighestBit, generateAnimationData, getBinaryLength } from '../../algorithms';
+import '../common/Visualizer.css';
 
 interface DPHighestBitVisualizerProps {
   n: number;

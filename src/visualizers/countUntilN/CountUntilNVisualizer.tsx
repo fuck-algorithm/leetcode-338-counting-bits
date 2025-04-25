@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
-import CoordinateSystem from '../components/CoordinateSystem';
-import BinaryDisplay from '../components/BinaryDisplay';
-import AlgorithmInfo from '../components/AlgorithmInfo';
-import AnimationControls from '../components/AnimationControls';
-import { useAnimation } from '../hooks/useAnimation';
-import { countBitsBrianKernighan, generateAnimationData, getBinaryLength } from '../algorithms';
+import CoordinateSystem from '../../components/CoordinateSystem';
+import BinaryDisplay from '../../components/BinaryDisplay';
+import AlgorithmInfo from '../../components/AlgorithmInfo';
+import AnimationControls from '../../components/AnimationControls';
+import { useAnimation } from '../../hooks/useAnimation';
+import { countBitsBrianKernighan, generateAnimationData, getBinaryLength } from '../../algorithms';
 import './CountUntilNVisualizer.css';
+import '../common/Visualizer.css';
 
 interface CountUntilNVisualizerProps {
   n: number;

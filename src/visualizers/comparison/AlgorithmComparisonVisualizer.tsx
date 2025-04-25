@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import CoordinateSystem from '../components/CoordinateSystem';
-import BinaryDisplay from '../components/BinaryDisplay';
-import AnimationControls from '../components/AnimationControls';
-import { useAnimation } from '../hooks/useAnimation';
+import CoordinateSystem from '../../components/CoordinateSystem';
+import BinaryDisplay from '../../components/BinaryDisplay';
+import AnimationControls from '../../components/AnimationControls';
+import { useAnimation } from '../../hooks/useAnimation';
 import { 
   countBitsBrianKernighan, 
   countBitsDPHighestBit, 
@@ -10,8 +10,9 @@ import {
   countBitsDPLeastSignificantBit,
   generateAnimationData, 
   getBinaryLength 
-} from '../algorithms';
+} from '../../algorithms';
 import './AlgorithmComparisonVisualizer.css';
+import '../common/Visualizer.css';
 
 interface AlgorithmComparisonVisualizerProps {
   n: number;

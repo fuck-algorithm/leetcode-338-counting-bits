@@ -1,12 +1,13 @@
 import React from 'react';
-import CoordinateSystem from '../components/CoordinateSystem';
-import BinaryDisplay from '../components/BinaryDisplay';
-import AlgorithmInfo from '../components/AlgorithmInfo';
-import AnimationControls from '../components/AnimationControls';
-import { useAnimation } from '../hooks/useAnimation';
-import { countBitsDPLowestBit, generateAnimationData, getBinaryLength } from '../algorithms';
+import CoordinateSystem from '../../components/CoordinateSystem';
+import BinaryDisplay from '../../components/BinaryDisplay';
+import AlgorithmInfo from '../../components/AlgorithmInfo';
+import AnimationControls from '../../components/AnimationControls';
+import { useAnimation } from '../../hooks/useAnimation';
+import { countBitsDPLeastSignificantBit, generateAnimationData, getBinaryLength } from '../../algorithms';
+import '../common/Visualizer.css';
 
-interface DPLowestBitVisualizerProps {
+interface DPLeastSignificantBitVisualizerProps {
   n: number;
 }
 
@@ -14,15 +15,14 @@ interface StepData {
   number: number;
   binary: string;
   bits: number;
-  rightShift: number;
-  lowestBit: number;
+  result: number;
   highlightBits: number[];
 }
 
-const DPLowestBitVisualizer: React.FC<DPLowestBitVisualizerProps> = ({ n }) => {
+const DPLeastSignificantBitVisualizer: React.FC<DPLeastSignificantBitVisualizerProps> = ({ n }) => {
   const maxBinaryLength = getBinaryLength(n);
-  const results = countBitsDPLowestBit(n);
-  const points = generateAnimationData(countBitsDPLowestBit, n);
+  const results = countBitsDPLeastSignificantBit(n);
+  const points = generateAnimationData(countBitsDPLeastSignificantBit, n);
   
   // 生成每个数字的详细步骤数据
   const generateStepsData = (): StepData[] => {
@@ -33,28 +33,32 @@ const DPLowestBitVisualizer: React.FC<DPLowestBitVisualizerProps> = ({ n }) => {
       number: 0,
       binary: '0'.padStart(maxBinaryLength, '0'),
       bits: 0,
-      rightShift: 0,
-      lowestBit: 0,
+      result: 0,
       highlightBits: [],
     });
     
     // 处理数字1~n
     for (let i = 1; i <= n; i++) {
       const binary = i.toString(2).padStart(maxBinaryLength, '0');
-      const rightShift = i >> 1;
-      const lowestBit = i & 1;
+      const result = i & (i - 1);
       const bits = results[i];
       
-      // 高亮显示最低位
+      // 找出消除的最低设置位
+      const prevBinary = i.toString(2).padStart(maxBinaryLength, '0');
+      const resultBinary = result.toString(2).padStart(maxBinaryLength, '0');
       const highlightBits: number[] = [];
-      highlightBits.push(binary.length - 1);
+      
+      for (let j = 0; j < maxBinaryLength; j++) {
+        if (prevBinary[j] !== resultBinary[j]) {
+          highlightBits.push(j);
+        }
+      }
       
       stepsData.push({
         number: i,
         binary,
         bits,
-        rightShift,
-        lowestBit,
+        result,
         highlightBits,
       });
     }
@@ -96,9 +100,9 @@ const DPLowestBitVisualizer: React.FC<DPLowestBitVisualizerProps> = ({ n }) => {
     : [];
   
   return (
-    <div className="algorithm-visualizer dp-lowest-bit-visualizer">
+    <div className="algorithm-visualizer dp-least-significant-bit-visualizer">
       <div className="visualizer-header">
-        <AlgorithmInfo algorithm="dpLowestBit" />
+        <AlgorithmInfo algorithm="dpLeastSignificantBit" />
       </div>
       
       <div className="visualizer-content">
@@ -120,12 +124,11 @@ const DPLowestBitVisualizer: React.FC<DPLowestBitVisualizerProps> = ({ n }) => {
               <div className="step-info">
                 <h4>当前步骤：</h4>
                 <p>处理数字：{currentStepData.number}</p>
-                <p>右移一位 (i{'>'}1)：{currentStepData.rightShift}</p>
-                <p>最低位 (i&1)：{currentStepData.lowestBit}</p>
+                <p>i & (i-1)：{currentStepData.result}</p>
                 <p>1的个数：{currentStepData.bits}</p>
                 {currentStepData.number > 0 && (
                   <p className="formula">
-                    bits[{currentStepData.number}] = bits[{currentStepData.rightShift}] + {currentStepData.lowestBit} = {currentStepData.bits}
+                    bits[{currentStepData.number}] = bits[{currentStepData.result}] + 1 = {currentStepData.bits}
                   </p>
                 )}
               </div>
@@ -137,12 +140,22 @@ const DPLowestBitVisualizer: React.FC<DPLowestBitVisualizerProps> = ({ n }) => {
                   padding={maxBinaryLength}
                   highlightBits={currentStepData.highlightBits}
                 />
-                <p>
-                  i{'>'}1 = {currentStepData.number}{'>'}1 = {currentStepData.rightShift}
-                  <span className="binary-small"> ({currentStepData.rightShift.toString(2).padStart(maxBinaryLength - 1, '0')})</span>
-                </p>
-                <p>
-                  i&1 = {currentStepData.number}&1 = {currentStepData.lowestBit}
+                <div className="operation">
+                  <div className="operation-row">
+                    <span className="operation-label">i:</span>
+                    <span className="operation-value">{currentStepData.number} = {currentStepData.binary}</span>
+                  </div>
+                  <div className="operation-row">
+                    <span className="operation-label">i-1:</span>
+                    <span className="operation-value">{currentStepData.number - 1} = {(currentStepData.number - 1).toString(2).padStart(maxBinaryLength, '0')}</span>
+                  </div>
+                  <div className="operation-row">
+                    <span className="operation-label">i & (i-1):</span>
+                    <span className="operation-value">{currentStepData.result} = {currentStepData.result.toString(2).padStart(maxBinaryLength, '0')}</span>
+                  </div>
+                </div>
+                <p className="operation-info">
+                  i & (i-1) 操作消除了 i 二进制表示中最低位的1
                 </p>
               </div>
             </>
@@ -168,4 +181,4 @@ const DPLowestBitVisualizer: React.FC<DPLowestBitVisualizerProps> = ({ n }) => {
   );
 };
 
-export default DPLowestBitVisualizer; 
+export default DPLeastSignificantBitVisualizer; 

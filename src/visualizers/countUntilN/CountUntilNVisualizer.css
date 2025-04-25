@@ -1,0 +1,64 @@
+.count-until-n-visualizer .animation-toggle {
+  margin: 10px 0;
+  display: flex;
+  align-items: center;
+}
+
+.count-until-n-visualizer .animation-toggle input {
+  margin-right: 8px;
+}
+
+.count-until-n-visualizer .step-info .highlight-count {
+  font-weight: bold;
+  color: #4caf50;
+  padding: 2px 6px;
+  background-color: #e8f5e9;
+  border-radius: 4px;
+}
+
+.count-until-n-visualizer .bit-animation-container {
+  margin: 15px 0;
+}
+
+.count-until-n-visualizer .bit-count-animation {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.count-until-n-visualizer .bit-counter {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  color: white;
+  font-weight: bold;
+  animation: pop-in 0.4s ease forwards;
+  opacity: 0;
+  transform: scale(0.5);
+}
+
+.count-until-n-visualizer .bit-count-sum {
+  font-size: 1.2rem;
+  font-weight: bold;
+  margin-top: 10px;
+  text-align: center;
+}
+
+@keyframes pop-in {
+  0% {
+    opacity: 0;
+    transform: scale(0.5);
+  }
+  70% {
+    opacity: 1;
+    transform: scale(1.2);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+} 

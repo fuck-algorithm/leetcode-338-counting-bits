@@ -69,9 +69,18 @@ const BinaryDisplay: React.FC<BinaryDisplayProps> = ({
     
     return classes.join(' ');
   };
+
+  // 计算十进制中每个位的值
+  const getPositionValue = (position: number) => {
+    return Math.pow(2, position);
+  };
   
   return (
     <div className="binary-display">
+      <div className="binary-explanation">
+        <span className="number-label">数字 {number} 的二进制表示：</span>
+      </div>
+      
       <div className="binary-value">
         {displayBits.map((bit, index) => (
           <span
@@ -86,12 +95,43 @@ const BinaryDisplay: React.FC<BinaryDisplayProps> = ({
           </span>
         ))}
       </div>
+
       <div className="binary-indices">
-        {Array.from(binaryString).map((_, index) => (
-          <span key={index} className="binary-index">
-            {binaryString.length - index - 1}
-          </span>
-        ))}
+        {Array.from(binaryString).map((_, index) => {
+          const position = binaryString.length - index - 1;
+          return (
+            <span key={index} className="binary-index">
+              2<sup>{position}</sup>
+            </span>
+          );
+        })}
+      </div>
+
+      <div className="binary-values">
+        {Array.from(binaryString).map((bit, index) => {
+          const position = binaryString.length - index - 1;
+          const value = bit === '1' ? getPositionValue(position) : 0;
+          return (
+            <span key={index} className={`binary-position-value ${value ? 'has-value' : ''}`}>
+              {value || '·'}
+            </span>
+          );
+        })}
+      </div>
+
+      <div className="binary-sum">
+        {number > 0 && (
+          <div className="sum-explanation">
+            {displayBits
+              .map((bit, index) => {
+                const position = displayBits.length - index - 1;
+                return bit === '1' ? getPositionValue(position) : null;
+              })
+              .filter(value => value !== null)
+              .join(' + ')} = {number}
+          </div>
+        )}
+        {number === 0 && <div className="sum-explanation">0</div>}
       </div>
     </div>
   );

@@ -8,66 +8,64 @@ interface AlgorithmInfoProps {
 const AlgorithmInfo: React.FC<AlgorithmInfoProps> = ({ algorithm }) => {
   const algorithmDetails = {
     brianKernighan: {
-      name: 'Brian Kernighan算法',
-      description: '利用位运算的技巧，使用 x & (x-1) 来快速消除二进制表示中最低位的1',
-      timecomplexity: 'O(nlogn)',
-      spacecomplexity: 'O(1)',
+      name: 'Brian Kernighan算法 (简单计数法)',
+      description: '像玩消消乐一样，每次消掉一个1，看消了几次就知道有几个1',
+      timecomplexity: '速度：中等',
+      spacecomplexity: '内存：节省',
       steps: [
-        '初始化结果数组 result，长度为n+1，初始值全部为0',
-        '从1到n遍历每个数字i',
-        '对每个数字i，使用countOnes函数计算i中1的个数',
-        'countOnes函数原理：每次操作x & (x-1)可以消除二进制中最低位的1',
-        '重复此操作直到x变为0，统计操作次数即为1的个数'
+        '问题：计算0到n每个数的二进制中有多少个1',
+        '方法：每次消除最右边的1，记录消除了几次',
+        '特点：就像打地鼠游戏，每次打掉一个地鼠并计数',
+        '举例：数字10 (二进制1010)，消掉右边1变成1000，再消掉变成0000，共消了2次，所以有2个1'
       ]
     },
     dpHighestBit: {
-      name: '动态规划——最高有效位',
-      description: '利用动态规划，结合最高有效位的性质计算比特位',
-      timecomplexity: 'O(n)',
-      spacecomplexity: 'O(1)',
+      name: '最高位法 (找规律)',
+      description: '利用已知结果加速计算，像堆积木一样复用之前的结果',
+      timecomplexity: '速度：快',
+      spacecomplexity: '内存：节省',
       steps: [
-        '初始化结果数组 bits，长度为n+1，bits[0] = 0',
-        '初始化 highBit = 0，表示当前处理数字的二进制表示中的最高有效位',
-        '从1到n遍历每个数字i',
-        '如果 i & (i-1) == 0，说明i是2的幂，更新 highBit = i',
-        '动态规划状态转移：bits[i] = bits[i - highBit] + 1'
+        '把数字想象成两部分：最高位的1，和剩下的部分',
+        '举例：数字9 (二进制1001) = 最高位(8) + 剩余部分(1)',
+        '聪明方法：9中1的个数 = 1中1的个数 + 1（最高位贡献的1）',
+        '像解谜游戏，用已知的小块拼出新的大块'
       ]
     },
     dpLowestBit: {
-      name: '动态规划——最低有效位',
-      description: '利用动态规划，结合最低有效位计算比特位',
-      timecomplexity: 'O(n)',
-      spacecomplexity: 'O(1)',
+      name: '最低位法 (分奇偶)',
+      description: '像拆积木一样，把数字拆成两半，一半我们已经知道答案',
+      timecomplexity: '速度：快',
+      spacecomplexity: '内存：节省',
       steps: [
-        '初始化结果数组 bits，长度为n+1，bits[0] = 0',
-        '从1到n遍历每个数字i',
-        '将i右移一位，即 i>>1，表示去掉最低位的数字',
-        '判断i的最低位是否为1，即 i&1',
-        '动态规划状态转移：bits[i] = bits[i>>1] + (i&1)'
+        '把数字分成两部分：右移一位的结果，和最低位',
+        '举例：7 (二进制111) = 3(11)右移 + 最低位1',
+        '奇数：比它除以2的结果多一个1',
+        '偶数：和它除以2的结果1的个数相同',
+        '像分类游戏，奇数和偶数走不同的路'
       ]
     },
     dpLeastSignificantBit: {
-      name: '动态规划——最低设置位',
-      description: '利用动态规划，使用i & (i-1)计算比特位',
-      timecomplexity: 'O(n)',
-      spacecomplexity: 'O(1)',
+      name: '最低有效位法 (去掉一个1)',
+      description: '像剥洋葱，一层层剥掉最外面的1，直到全部剥完',
+      timecomplexity: '速度：快',
+      spacecomplexity: '内存：节省',
       steps: [
-        '初始化结果数组 bits，长度为n+1，bits[0] = 0',
-        '从1到n遍历每个数字i',
-        '计算 i & (i-1)，这会消除i中最低位的1',
-        '动态规划状态转移：bits[i] = bits[i & (i-1)] + 1'
+        '每个数都可以变成：消掉一个1后的数字 + 1',
+        '举例：数字6 (二进制110)，消掉一个1变成4 (100)',
+        '所以6中1的个数 = 4中1的个数 + 1',
+        '像接力赛跑，每次传递一个1，看传了几次'
       ]
     },
     comparison: {
-      name: '算法比较视图',
-      description: '比较不同算法在计算比特位时的执行过程和结果',
-      timecomplexity: '因算法而异',
-      spacecomplexity: '因算法而异',
+      name: '算法对比 (哪个更好)',
+      description: '像赛车比赛，看看哪种算法跑得更快、更省油',
+      timecomplexity: '各有不同',
+      spacecomplexity: '各有不同',
       steps: [
-        '将多种算法应用于相同的输入范围',
-        '通过不同颜色的曲线区分各算法的结果',
-        '支持实时切换需要展示的算法',
-        '提供直观的对比视图以便理解算法差异'
+        '把不同方法放在同一起跑线比较',
+        '用不同颜色区分每种方法',
+        '可以随时切换看不同的方法',
+        '直观看出哪种方法更简单、更高效'
       ]
     }
   };
@@ -85,7 +83,7 @@ const AlgorithmInfo: React.FC<AlgorithmInfoProps> = ({ algorithm }) => {
       </div>
       
       <div className="steps">
-        <h4>算法步骤：</h4>
+        <h4>简单理解：</h4>
         <ol>
           {details.steps.map((step: string, index: number) => (
             <li key={index}>{step}</li>

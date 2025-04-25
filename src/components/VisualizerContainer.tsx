@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
 import { AlgorithmType } from './AlgorithmSelector';
-import BrianKernighanVisualizer from '../visualizers/BrianKernighanVisualizer';
-import DPHighestBitVisualizer from '../visualizers/DPHighestBitVisualizer';
-import DPLowestBitVisualizer from '../visualizers/DPLowestBitVisualizer';
-import DPLeastSignificantBitVisualizer from '../visualizers/DPLeastSignificantBitVisualizer';
-import AlgorithmComparisonVisualizer from '../visualizers/AlgorithmComparisonVisualizer';
+import {
+  BrianKernighanVisualizer,
+  DPHighestBitVisualizer,
+  DPLowestBitVisualizer,
+  DPLeastSignificantBitVisualizer,
+  AlgorithmComparisonVisualizer
+} from '../visualizers';
 
 interface VisualizerContainerProps {
   algorithm: AlgorithmType | null;
