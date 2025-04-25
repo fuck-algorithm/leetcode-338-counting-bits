@@ -1,4 +1,5 @@
 import React from 'react';
+import './AnimationControls.css';
 
 interface AnimationControlsProps {
   currentStep: number;
@@ -25,78 +26,70 @@ const AnimationControls: React.FC<AnimationControlsProps> = ({
   onPrevStep,
   onGoToStep,
 }) => {
-  const handleSliderChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleProgressChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = parseInt(e.target.value, 10);
     onGoToStep(value);
   };
-
+  
   return (
     <div className="animation-controls">
-      <div className="controls-buttons">
+      <button
+        className="animation-button"
+        onClick={onPrevStep}
+        disabled={currentStep <= 0}
+        title="上一步"
+      >
+        ⏮
+      </button>
+      
+      {isPlaying ? (
         <button
-          className="control-button"
-          onClick={onReset}
-          title="重置"
+          className="animation-button active"
+          onClick={onPause}
+          title="暂停"
         >
-          <span>⏮</span>
+          ⏸
         </button>
+      ) : (
         <button
-          className="control-button"
-          onClick={onPrevStep}
-          disabled={currentStep <= -1}
-          title="上一步"
+          className="animation-button"
+          onClick={onPlay}
+          title="播放"
         >
-          <span>⏪</span>
+          ▶
         </button>
-        {isPlaying ? (
-          <button
-            className="control-button"
-            onClick={onPause}
-            title="暂停"
-          >
-            <span>⏸</span>
-          </button>
-        ) : (
-          <button
-            className="control-button"
-            onClick={onPlay}
-            disabled={currentStep >= totalSteps - 1}
-            title="播放"
-          >
-            <span>▶️</span>
-          </button>
-        )}
-        <button
-          className="control-button"
-          onClick={onNextStep}
-          disabled={currentStep >= totalSteps - 1}
-          title="下一步"
-        >
-          <span>⏩</span>
-        </button>
-      </div>
-
-      <div className="controls-progress">
-        <div className="progress-info">
-          <span className="step-counter">步骤：{currentStep + 1} / {totalSteps}</span>
-          <div className="progress-bar-container">
-            <input
-              type="range"
-              min="-1"
-              max={totalSteps - 1}
-              value={currentStep}
-              onChange={handleSliderChange}
-              className="progress-slider"
-            />
-            <div className="progress-bar">
-              <div
-                className="progress-bar-inner"
-                style={{ width: `${progress}%` }}
-              ></div>
-            </div>
-          </div>
+      )}
+      
+      <button
+        className="animation-button"
+        onClick={onNextStep}
+        disabled={currentStep >= totalSteps - 1}
+        title="下一步"
+      >
+        ⏭
+      </button>
+      
+      <div className="animation-progress">
+        <input
+          type="range"
+          min="-1"
+          max={totalSteps - 1}
+          value={currentStep}
+          onChange={handleProgressChange}
+          className="progress-slider"
+        />
+        <div className="step-indicators">
+          <span>步骤: {currentStep >= 0 ? currentStep + 1 : 0} / {totalSteps}</span>
         </div>
       </div>
+      
+      <button
+        className="reset-button"
+        onClick={onReset}
+        title="重置"
+      >
+        重置
+      </button>
     </div>
   );
 };
