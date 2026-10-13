@@ -41,13 +41,33 @@ const CoordinateSystem: React.FC<CoordinateSystemProps> = ({
   const svgRef = useRef<SVGSVGElement | null>(null);
   const containerRef = useRef<HTMLDivElement | null>(null);
   const [uniqueId] = useState(() => `coord-${Math.random().toString(36).substr(2, 9)}`);
+  const [containerSize, setContainerSize] = useState({ width: 0, height });
 
   useEffect(() => {
-    if (!svgRef.current || !containerRef.current) return;
+    if (!containerRef.current) return;
 
-    // 获取容器宽度以实现响应式
-    const containerWidth = containerRef.current.clientWidth;
-    const containerHeight = height;
+    const element = containerRef.current;
+    const observer = new ResizeObserver(([entry]) => {
+      if (!entry) return;
+      const { width: observedWidth, height: observedHeight } = entry.contentRect;
+      setContainerSize(previous => {
+        const nextWidth = Math.round(observedWidth);
+        const nextHeight = Math.round(observedHeight);
+        return previous.width === nextWidth && previous.height === nextHeight
+          ? previous
+          : { width: nextWidth, height: nextHeight };
+      });
+    });
+    observer.observe(element);
+
+    return () => observer.disconnect();
+  }, []);
+
+  useEffect(() => {
+    if (!svgRef.current || !containerRef.current || !containerSize.width || !containerSize.height) return;
+
+    const containerWidth = containerSize.width;
+    const containerHeight = containerSize.height;
     
     // 清除之前的SVG内容
     d3.select(svgRef.current).selectAll('*').remove();
@@ -79,11 +99,11 @@ const CoordinateSystem: React.FC<CoordinateSystemProps> = ({
     
     // X轴和Y轴的比例尺
     const xScale = d3.scaleLinear()
-      .domain([0, maxX])
+      .domain([0, maxX || 1])
       .range([0, innerWidth]);
-    
+
     const yScale = d3.scaleLinear()
-      .domain([0, maxY])
+      .domain([0, maxY || 1])
       .range([innerHeight, 0]);
     
     // 创建X轴和Y轴
@@ -132,16 +152,16 @@ const CoordinateSystem: React.FC<CoordinateSystemProps> = ({
     // 添加图示文本
     g.append('text')
       .attr('x', 10)
-      .attr('y', 20)
-      .attr('fill', '#333')
-      .attr('font-size', '14px')
+      .attr('y', 19)
+      .attr('fill', '#405149')
+      .attr('font-size', '11px')
       .text('横轴：数字 (0到n)');
-    
+
     g.append('text')
       .attr('x', 10)
-      .attr('y', 45)
-      .attr('fill', '#333')
-      .attr('font-size', '14px')
+      .attr('y', 37)
+      .attr('fill', '#405149')
+      .attr('font-size', '11px')
       .text('纵轴：该数字二进制中1的个数');
     
     // 添加明显的坐标原点标记
@@ -522,7 +542,7 @@ const CoordinateSystem: React.FC<CoordinateSystemProps> = ({
       .attr('font-weight', 'bold')
       .text('1的个数');
     
-  }, [points, width, height, margin, highlightedPoint, currentStep, maxX, maxY, multiSeriesData, highlightedPoints, uniqueId]);
+  }, [points, width, height, margin, highlightedPoint, currentStep, maxX, maxY, multiSeriesData, highlightedPoints, uniqueId, containerSize]);
 
   return (
     <div 
@@ -570,13 +590,9 @@ const CoordinateSystem: React.FC<CoordinateSystemProps> = ({
       
       {/* 添加说明文字 */}
       <div className="coordinate-description">
-        <p><strong>图表说明</strong>：</p>
-        <p>- 每个点代表一个数字</p>
-        <p>- 横坐标是数字的值</p>
-        <p>- 纵坐标是该数字二进制中1的个数</p>
-        <p>- 黄色圆圈表示当前正在处理的数字</p>
-        <p>- 虚线是辅助线，帮助查看坐标</p>
-        <p>- 悬停在点上可查看详细信息</p>
+        <p><strong>图表说明</strong>：点代表数字及其 1 的数量</p>
+        <p>黄色标记为当前数字 · 虚线为参考线</p>
+        <p>悬停数据点可查看二进制信息</p>
       </div>
     </div>
   );

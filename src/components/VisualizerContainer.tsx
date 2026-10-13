@@ -1,83 +1,41 @@
-import React, { useState, useEffect } from 'react';
-import { AlgorithmType } from './AlgorithmSelector';
+import React, { useState } from 'react'
+import { AlgorithmType } from './AlgorithmSelector'
 import {
   BrianKernighanVisualizer,
   DPHighestBitVisualizer,
   DPLowestBitVisualizer,
   DPLeastSignificantBitVisualizer,
-  AlgorithmComparisonVisualizer
-} from '../visualizers';
+  AlgorithmComparisonVisualizer,
+} from '../visualizers'
 
 interface VisualizerContainerProps {
-  algorithm: AlgorithmType | null;
+  algorithm: AlgorithmType | null
 }
 
 const VisualizerContainer: React.FC<VisualizerContainerProps> = ({ algorithm }) => {
-  // 生成0-30之间的随机整数
-  const getRandomN = () => Math.floor(Math.random() * 31);
-  
-  const [inputN, setInputN] = useState<number>(getRandomN());
-  
-  // 页面初始化时使用随机值
-  useEffect(() => {
-    setInputN(getRandomN());
-  }, []);
-  
-  const handleNChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = parseInt(e.target.value, 10);
-    if (!isNaN(value) && value >= 0 && value <= 30) {
-      setInputN(value);
+  const [inputN, setInputN] = useState(() => Math.floor(Math.random() * 31))
+
+  const handleNChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const value = Number.parseInt(event.target.value, 10)
+    if (Number.isInteger(value) && value >= 0 && value <= 30) {
+      setInputN(value)
     }
-  };
-  
-  const handleRandomClick = () => {
-    setInputN(getRandomN());
-  };
-  
-  if (!algorithm) {
-    return (
-      <div className="visualizer-container empty">
-        <div className="welcome-message">
-          <h2>LeetCode 338: 比特位计数</h2>
-          <p>请从上方选择一种算法来查看动画演示。</p>
-          <p>该问题的要求是：给你一个整数 n ，计算从 0 到 n 的每个整数的二进制表示中 1 的个数。</p>
-          <div className="n-input-container">
-            <label htmlFor="n-input">设置 n 的值 (0-30):</label>
-            <div style={{ display: 'flex', alignItems: 'center' }}>
-              <input
-                id="n-input"
-                type="number"
-                min="0"
-                max="30"
-                value={inputN}
-                onChange={handleNChange}
-              />
-              <button 
-                onClick={handleRandomClick}
-                style={{ 
-                  marginLeft: '8px',
-                  border: '1px solid #ddd',
-                  borderRadius: '4px',
-                  padding: '4px 8px',
-                  background: '#f8f9fa',
-                  cursor: 'pointer'
-                }}
-                title="随机生成一个值"
-              >
-                🎲
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
-    );
   }
-  
+
+  const handleRandomClick = () => {
+    setInputN(Math.floor(Math.random() * 31))
+  }
+
   return (
     <div className="visualizer-container">
-      <div className="n-input-container">
-        <label htmlFor="n-input">设置 n 的值 (0-30):</label>
-        <div style={{ display: 'flex', alignItems: 'center' }}>
+      <div className="workspace-toolbar">
+        <div className="workspace-title">
+          <span className="workspace-kicker">BITWISE LAB <span aria-hidden="true">/</span> 338</span>
+          <h1>比特位计数</h1>
+          <p>计算 0 到 n 中，每个整数二进制表示里 1 的数量。</p>
+        </div>
+        <div className="n-input-container">
+          <label htmlFor="n-input">上限 <span>n</span></label>
           <input
             id="n-input"
             type="number"
@@ -85,33 +43,32 @@ const VisualizerContainer: React.FC<VisualizerContainerProps> = ({ algorithm }) 
             max="30"
             value={inputN}
             onChange={handleNChange}
+            aria-label="设置 n 的值，范围 0 到 30"
           />
-          <button 
+          <button
+            className="random-button"
+            type="button"
             onClick={handleRandomClick}
-            style={{ 
-              marginLeft: '8px',
-              border: '1px solid #ddd',
-              borderRadius: '4px',
-              padding: '4px 8px',
-              background: '#f8f9fa',
-              cursor: 'pointer'
-            }}
             title="随机生成一个值"
+            aria-label="随机生成 n 值"
           >
-            🎲
+            <svg viewBox="0 0 20 20" aria-hidden="true">
+              <path d="M15.5 3.5h2v5h-5v-2h2.1l-3.1 3.1-3-3-5.8 5.8-1.4-1.4 7.2-7.2 3 3 2.5-2.5h-2.5v-2h4zM4.3 16.5H2.9l4.5-4.5 3 3 1.8-1.8 1.4 1.4-3.2 3.2-3-3-1.7 1.7z" />
+            </svg>
           </button>
         </div>
       </div>
-      
+
       <div className="visualizer-wrapper">
         {algorithm === 'brianKernighan' && <BrianKernighanVisualizer n={inputN} />}
         {algorithm === 'dpHighestBit' && <DPHighestBitVisualizer n={inputN} />}
         {algorithm === 'dpLowestBit' && <DPLowestBitVisualizer n={inputN} />}
         {algorithm === 'dpLeastSignificantBit' && <DPLeastSignificantBitVisualizer n={inputN} />}
         {algorithm === 'comparison' && <AlgorithmComparisonVisualizer n={inputN} />}
+        {!algorithm && <div className="empty-workspace">从左侧选择一种算法，查看它如何逐步得到结果。</div>}
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default VisualizerContainer; 
+export default VisualizerContainer

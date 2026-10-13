@@ -197,7 +197,7 @@ const AlgorithmComparisonVisualizer: React.FC<AlgorithmComparisonVisualizerProps
   
   return (
     <div className="algorithm-visualizer comparison-visualizer">
-      <div className="visualizer-header">
+      <div className="visualizer-header comparison-heading">
         <h3>算法比较可视化</h3>
         <div className="algorithm-selector">
           {algorithms.map(algo => (

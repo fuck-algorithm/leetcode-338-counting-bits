@@ -59,7 +59,11 @@ const AnimationControls: React.FC<AnimationControlsProps> = ({
           
         case ' ':  // 空格键：播放/暂停
           e.preventDefault();
-          isPlaying ? onPause() : onPlay();
+          if (isPlaying) {
+            onPause();
+          } else {
+            onPlay();
+          }
           break;
           
         case 'r':  // r键（小写）：重置
