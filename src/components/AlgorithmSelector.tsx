@@ -1,37 +1,33 @@
-import React from 'react'
-
 export type AlgorithmType = 'brianKernighan' | 'dpHighestBit' | 'dpLowestBit' | 'dpLeastSignificantBit' | 'comparison'
 
 interface AlgorithmSelectorProps {
   currentAlgorithm: AlgorithmType | null
-  onSelectAlgorithm: (algorithm: AlgorithmType) => void
+  onSelectAlgorithm: (_selectedAlgorithm: AlgorithmType) => void
 }
 
 const algorithms: { id: AlgorithmType; name: string }[] = [
-  { id: 'brianKernighan', name: 'Brian Kernighan' },
-  { id: 'dpHighestBit', name: '动态规划 · 最高有效位' },
-  { id: 'dpLowestBit', name: '动态规划 · 最低有效位' },
-  { id: 'dpLeastSignificantBit', name: '动态规划 · 最低设置位' },
-  { id: 'comparison', name: '算法比较' },
+  { id: 'brianKernighan', name: '逐个数 1' },
+  { id: 'dpHighestBit', name: '找最高位' },
+  { id: 'dpLowestBit', name: '看最低位' },
+  { id: 'dpLeastSignificantBit', name: '清除最低位' },
+  { id: 'comparison', name: '四种方法对比' },
 ]
 
-const AlgorithmSelector: React.FC<AlgorithmSelectorProps> = ({ currentAlgorithm, onSelectAlgorithm }) => (
-  <nav className="algorithm-selector" aria-label="选择算法">
-    <div className="algorithm-buttons">
+export default function AlgorithmSelector({ currentAlgorithm, onSelectAlgorithm }: AlgorithmSelectorProps) {
+  return (
+    <nav className="lesson-tabs" aria-label="选择解法">
       {algorithms.map((algorithm, index) => (
         <button
+          className={`lesson-tab ${currentAlgorithm === algorithm.id ? 'lesson-tab-active' : ''} ${algorithm.id === 'comparison' ? 'lesson-tab-compare' : ''}`}
           key={algorithm.id}
-          type="button"
-          className={`algorithm-button ${currentAlgorithm === algorithm.id ? 'active' : ''}`}
           onClick={() => onSelectAlgorithm(algorithm.id)}
-          aria-current={currentAlgorithm === algorithm.id ? 'page' : undefined}
+          type="button"
+          aria-pressed={currentAlgorithm === algorithm.id}
         >
-          <span className="algorithm-marker" aria-hidden="true">{String(index + 1).padStart(2, '0')}</span>
+          {algorithm.id !== 'comparison' && <span className="tab-index">{String(index + 1).padStart(2, '0')}</span>}
           <span>{algorithm.name}</span>
         </button>
       ))}
-    </div>
-  </nav>
-)
-
-export default AlgorithmSelector
+    </nav>
+  )
+}

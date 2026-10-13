@@ -1,25 +1,21 @@
-import { useState } from 'react'
 import './App.css'
-import AlgorithmSelector, { AlgorithmType } from './components/AlgorithmSelector'
 import VisualizerContainer from './components/VisualizerContainer'
 
 function App() {
-  const [selectedAlgorithm, setSelectedAlgorithm] = useState<AlgorithmType>('brianKernighan')
-
   return (
     <div className="app-container">
       <header className="app-header">
-        <a className="brand-mark" href="https://leetcode.cn/problems/counting-bits" target="_blank" rel="noopener noreferrer" aria-label="查看 LeetCode 338 题目">
+        <a className="brand-mark" href="https://fuck-algorithm.github.io/leetcode-hot-100/" aria-label="返回 LeetCode Hot 100">
           <span className="brand-symbol" aria-hidden="true">&amp;</span>
           <span className="brand-copy">
-            <strong>BIT COUNTING</strong>
-            <span>LeetCode <b>338</b></span>
+            <strong>算法拆解室</strong>
+            <span>把每一步都看明白</span>
           </span>
         </a>
         <div className="header-meta">
-          <span className="header-status"><i aria-hidden="true" />交互式算法演示</span>
-          <a className="back-link" href="https://fuck-algorithm.github.io/leetcode-hot-100/" target="_blank" rel="noopener noreferrer">
-            返回题库 <span aria-hidden="true">↗</span>
+          <span className="header-status"><i aria-hidden="true" />交互式学习</span>
+          <a className="problem-link" href="https://leetcode.cn/problems/counting-bits" target="_blank" rel="noopener noreferrer">
+            LeetCode 338 <span aria-hidden="true">↗</span>
           </a>
           <a className="github-link" href="https://github.com/fuck-algorithm/leetcode-338-counting-bits" target="_blank" rel="noopener noreferrer" aria-label="GitHub 仓库" title="GitHub 仓库">
             <svg height="19" width="19" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
@@ -28,24 +24,7 @@ function App() {
           </a>
         </div>
       </header>
-
-      <main className="app-main">
-        <section className="algorithm-rail" aria-label="算法选择">
-          <div className="rail-heading">
-            <span>算法</span>
-            <span className="rail-count">05</span>
-          </div>
-          <AlgorithmSelector currentAlgorithm={selectedAlgorithm} onSelectAlgorithm={setSelectedAlgorithm} />
-          <div className="rail-footnote">
-            <span className="rail-key">⌘</span>
-            <span>选择一种思路<br />逐步观察位运算</span>
-          </div>
-        </section>
-
-        <section className="workspace" aria-label="算法可视化工作区">
-          <VisualizerContainer algorithm={selectedAlgorithm} />
-        </section>
-      </main>
+      <VisualizerContainer />
     </div>
   )
 }
